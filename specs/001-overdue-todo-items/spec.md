@@ -1,6 +1,6 @@
 # Feature Specification: Overdue Todo Items
 
-**Feature Branch**: `001-overdue-todo-items`  
+**Feature Branch**: `001-overdue-todos`  
 **Created**: February 27, 2026  
 **Status**: Draft  
 **Input**: User description: "Support for Overdue Todo Items - Users need a clear, visual way to identify which todos have not been completed by their due date."
