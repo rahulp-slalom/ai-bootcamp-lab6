@@ -75,6 +75,17 @@
 - What happens when [boundary condition]?
 - How does system handle [error scenario]?
 
+## Constitution Alignment *(mandatory)*
+
+- **Scope Discipline**: Explain how this feature stays within simple single-user todo
+  scope, or document approved exception.
+- **API Contract Impact**: Identify whether todo API/data contracts change and how
+  frontend/backend compatibility is preserved.
+- **Testing Impact**: Define behavior tests required to follow fail-first workflow and
+  maintain 80%+ coverage.
+- **UI/Accessibility Impact**: Describe theme, keyboard access, focus visibility, and
+  aria-label implications for any UI changes.
+
 ## Requirements *(mandatory)*
 
 <!--

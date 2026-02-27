@@ -31,7 +31,16 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- Scope discipline: Feature remains within simple single-user todo scope, or includes
+  explicit approved exception.
+- Contract integrity: Any todo API/data-shape change includes coordinated
+  frontend/backend update plan.
+- Test-first gate: Plan defines failing-first tests and verifies coverage will not
+  regress below 80%.
+- UI/accessibility fidelity: Plan states impact on theme consistency, keyboard
+  accessibility, focus visibility, and aria labeling.
+- Maintainability gate: Plan includes lint/quality checks and limits complexity via
+  clear module responsibilities.
 
 ## Project Structure
 
