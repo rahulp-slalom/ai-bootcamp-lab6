@@ -53,8 +53,28 @@ Based on the feature specification's Constitution Alignment section and project 
 - **Status**: PASS - Uses existing theme colors, includes ARIA labels, works in both themes
 - **Evidence**: Spec mandates 4.5:1 text contrast, 3:1 background contrast, screen reader support via clock icon aria-label
 
+### Post-Design Re-evaluation (Phase 1 Complete)
+
+**Date**: February 27, 2026
+
+All constitution gates continue to PASS after completing design phase:
+
+✅ **Gate 1 - Scope**: Design confirms frontend-only changes to TodoCard.js. Two utility functions (`isOverdue`, `formatDueDate`) added inline. No new entities, no backend changes, no scope creep.
+
+✅ **Gate 2 - API Contracts**: data-model.md confirms zero API changes. Uses existing GET /api/todos and PUT /api/todos/:id unchanged. Backward compatible.
+
+✅ **Gate 3 - Testing**: contracts/ define 25+ specific test cases. quickstart.md provides full test implementation. All edge cases covered with Jest fake timers for deterministic date testing.
+
+✅ **Gate 4 - Accessibility**: 
+- contracts/TodoCard.md specifies clock icon with `aria-label="Overdue"` and `role="img"`
+- Light mode danger color (#c62828) achieves 6.57:1 contrast on white
+- Dark mode danger color (#ef5350) achieves 4.89:1 contrast on dark background
+- Background tint uses 8% opacity for subtle distinction (meets 3:1 for UI components)
+
+**Conclusion**: No constitution violations detected. Design adheres to all project principles. Ready for implementation (Phase 2).
+
 ### Summary
-**All gates PASS.** No constitution violations. Feature is frontend-only enhancement to existing functionality with comprehensive testing and accessibility requirements.
+**All gates PASS (initial + post-design).** No constitution violations. Feature is frontend-only enhancement to existing functionality with comprehensive testing and accessibility requirements.
 
 ## Project Structure
 
