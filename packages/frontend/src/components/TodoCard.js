@@ -1,10 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+
+// Date utility functions for overdue detection and formatting
+
+/**
+ * Determine if a todo is overdue
+ * @param {Object} todo - Todo object with dueDate and completed fields
+ * @returns {boolean} - True if overdue, false otherwise
+ */
+export function isOverdue(todo) {
+  if (!todo.dueDate || todo.completed) {
+    return false;
+  }
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const due = new Date(todo.dueDate);
+  due.setHours(0, 0, 0, 0);
+  
+  return due < today;
+}
+
+/**
+ * Format due date with relative text for recent dates
+ * @param {string|null} dueDate - ISO date string (YYYY-MM-DD) or null
+ * @param {boolean} isOverdueStatus - Whether the todo is overdue
+ * @returns {string|null} - Formatted date string or null
+ */
+export function formatDueDate(dueDate, isOverdueStatus) {
+  if (!dueDate) return null;
+  
+  const due = new Date(dueDate);
+  if (isNaN(due.getTime())) return null;
+  
+  const today = new Date();
+  due.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+  
+  const diffTime = today - due;
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  
+  // Relative formats (0-7 days)
+  if (diffDays === 0) return 'Due today';
+  if (diffDays === 1) return 'Due yesterday';
+  if (diffDays > 1 && diffDays <= 7) return `Due ${diffDays} days ago`;
+  if (diffDays === -1) return 'Due tomorrow';
+  if (diffDays < -1 && diffDays >= -7) return `Due in ${Math.abs(diffDays)} days`;
+  
+  // Absolute format (8+ days)
+  const formatted = due.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+  return `Due ${formatted}`;
+}
 
 function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
   const [editDueDate, setEditDueDate] = useState(todo.dueDate || '');
   const [editError, setEditError] = useState(null);
+
+  // Compute overdue status and formatted date
+  const overdueStatus = useMemo(() => isOverdue(todo), [todo.dueDate, todo.completed]);
+  const formattedDueDate = useMemo(() => formatDueDate(todo.dueDate, overdueStatus), [todo.dueDate, overdueStatus]);
 
   const handleToggle = async () => {
     try {
@@ -52,16 +112,6 @@ function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return null;
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
-
   if (isEditing) {
     return (
       <div className="todo-card todo-card-edit">
@@ -107,7 +157,7 @@ function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
   }
 
   return (
-    <div className={`todo-card ${todo.completed ? 'completed' : ''}`}>
+    <div className={`todo-card ${todo.completed ? 'completed' : ''} ${overdueStatus ? 'overdue' : ''}`}>
       <input
         type="checkbox"
         checked={todo.completed === 1}
@@ -121,7 +171,12 @@ function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
         <h3 className="todo-title">{todo.title}</h3>
         {todo.dueDate && (
           <p className="todo-due-date">
-            Due: {formatDate(todo.dueDate)}
+            {overdueStatus && (
+              <span className="overdue-icon" aria-label="Overdue" role="img">
+                ⏰
+              </span>
+            )}
+            {formattedDueDate}
           </p>
         )}
       </div>
